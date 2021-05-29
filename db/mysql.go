@@ -56,7 +56,7 @@ func ShowDBs() []map[string]string {
 }
 
 func ShowTables(database string) []map[string]string {
-	sql := fmt.Sprintf("select * from tables where table_schema='%s'",database)
+	sql := fmt.Sprintf("select * from tables where table_schema='%s' order by table_name asc",database)
 	return queryString(sql)
 }
 
