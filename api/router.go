@@ -8,7 +8,7 @@ import (
 
 func routers() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		RenderOKJson(w, "welcome to db compare")
+		RenderOKJson(w, "welcome")
 	})
 
 	//数据库列表 http://127.0.0.1:9100/databases
