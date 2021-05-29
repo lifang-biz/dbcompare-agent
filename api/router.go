@@ -26,25 +26,21 @@ func routers() {
 		}
 	})
 
-	//数据库的表结构 http://127.0.0.1:9100/table-columns?database=xlhd&table=admin
-	http.HandleFunc("/table-columns", func(w http.ResponseWriter, r *http.Request) {
+	//数据库的表结构和索引 http://127.0.0.1:9100/table-info?database=xlhd&table=admin
+	http.HandleFunc("/table-info", func(w http.ResponseWriter, r *http.Request) {
 		database := GetUrlArg( r,"database")
 		tableName := GetUrlArg( r,"table")
 		if len(tableName) < 1 || len(database) < 1{
 			RenderErrorJson(w,"请提供参数")
 		}else{
-			RenderOKJson(w, db.ShowTableColumns(database,tableName))
-		}
-	})
-
-	//数据库的表索引  http://127.0.0.1:9100/table-index?database=xlhd&table=admin
-	http.HandleFunc("/table-index", func(w http.ResponseWriter, r *http.Request) {
-		database := GetUrlArg( r,"database")
-		tableName := GetUrlArg( r,"table")
-		if len(tableName) < 1 || len(database) < 1{
-			RenderErrorJson(w,"请提供参数")
-		}else{
-			RenderOKJson(w, db.ShowTableIndexs(database,tableName))
+			type res struct {
+				Columns []map[string]string
+				Indexes []map[string]string
+			}
+			RenderOKJson(w, res{
+				Columns: db.ShowTableColumns(database,tableName),
+				Indexes: db.ShowTableIndexs(database,tableName),
+			})
 		}
 	})
 
