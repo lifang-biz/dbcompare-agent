@@ -66,7 +66,8 @@ func ShowTableColumns(database string,table string) []map[string]string{
 	return queryString(sql)
 }
 func ShowTableIndexs(database string,table string) []map[string]string{
-	sql := fmt.Sprintf("select * from statistics where table_schema='%s' and table_name='%s'",database,table)
+	// 一个索引有多个字段的话，会有多行，需要把字段合一下
+	sql := fmt.Sprintf("select *,GROUP_CONCAT(COLUMN_NAME) as COLUMN_NAME_ALL from statistics where table_schema='%s' and table_name='%s' group by INDEX_NAME",database,table)
 	return queryString(sql)
 }
 
