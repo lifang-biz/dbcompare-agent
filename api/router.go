@@ -18,6 +18,7 @@ func routers() {
 	})
 
 	//数据库下的表以及表结构、索引信息，一把全给出去
+	// https://dev.anyich.com/dbcompare/database-info?database=uospx
 	http.HandleFunc("/database-info", func(w http.ResponseWriter, r *http.Request) {
 		database := GetUrlArg( r,"database")
 		if len(database) < 1 {
@@ -25,18 +26,34 @@ func routers() {
 		}else{
 			type TableInfo struct {
 				Meta	map[string]string
-				Columns  []map[string]string
-				Indexes  []map[string]string
+				Columns  map[string]map[string]string
+				Indexes  map[string]map[string]string
 			}
 			res := make(map[string]*TableInfo,0)
 			tables :=  db.ShowTables(database)
 
 			for _,table := range tables {
 				if tableName, ok := table["TABLE_NAME"]; ok {
+					//数组转成 map，方便前端处理,放 map 会把顺序丢掉，前端要根据 ORDINAL_POSITION 重新排序
+					columnsMap := make(map[string]map[string]string,0 )
+					columns := db.ShowTableColumns(database,tableName)
+					for _,v := range columns {
+						columnName,_ := v["COLUMN_NAME"]
+						columnsMap[columnName] = v
+					}
+
+					//数组转成 map，方便前端处理
+					indexesMap := make(map[string]map[string]string,0 )
+					indexes := db.ShowTableIndexs(database,tableName)
+					for _,v := range indexes {
+						indexName,_ := v["INDEX_NAME"]
+						indexesMap[indexName] = v
+					}
+
 					tempTableInfo := &TableInfo{
 						Meta:    table,
-						Columns: db.ShowTableColumns(database,tableName),
-						Indexes: db.ShowTableIndexs(database,tableName),
+						Columns: columnsMap,
+						Indexes: indexesMap,
 					}
 					res[tableName] = tempTableInfo
 				}
