@@ -5,10 +5,16 @@ import (
 	"lifang.biz/dbcompare-client/conf"
 	"lifang.biz/dbcompare-client/db"
 	"lifang.biz/dbcompare-client/pkg"
+	"log"
 )
 
 func main()  {
 	conf.Setup()
+
+	if len(conf.Config().AppSetting.Token) < 8 {
+		log.Fatalln("Please set token in conf/app.ini, 8 characters at least.")
+	}
+
 	pkg.SetupLogger()
 	db.Setup()
 

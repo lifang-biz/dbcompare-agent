@@ -8,18 +8,33 @@ import (
 
 func routers() {
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		if !CheckToken(r) {
+			RenderErrorJson(w,"Token incorrect, Please check your token is equal to which in app.ini of DB Compare Node Server")
+			return
+		}
+
 		RenderOKJson(w, "pong")
 	})
 
 	//数据库列表 http://127.0.0.1:9100/databases
 	// https://dev.anyich.com/dbcompare/databases
 	http.HandleFunc("/databases", func(w http.ResponseWriter, r *http.Request) {
+		if !CheckToken(r) {
+			RenderErrorJson(w,"Token incorrect, Please check your token is equal to which in app.ini of DB Compare Node Server")
+			return
+		}
+
 		RenderOKJson(w, db.ShowDBs())
 	})
 
 	//数据库下的表以及表结构、索引信息，一把全给出去
 	// https://dev.anyich.com/dbcompare/database-info?database=uospx
 	http.HandleFunc("/database-info", func(w http.ResponseWriter, r *http.Request) {
+		if !CheckToken(r) {
+			RenderErrorJson(w,"Token incorrect, Please check your token is equal to which in app.ini of DB Compare Node Server")
+			return
+		}
+
 		database := GetUrlArg( r,"database")
 		if len(database) < 1 {
 			RenderErrorJson(w,"请提供数据库名称参数")
@@ -65,6 +80,11 @@ func routers() {
 	//数据库的表列表 http://127.0.0.1:9100/tables?database=xlhd
 	//https://dev.anyich.com/dbcompare/tables?database=xlhd
 	http.HandleFunc("/tables", func(w http.ResponseWriter, r *http.Request) {
+		if !CheckToken(r) {
+			RenderErrorJson(w,"Token incorrect, Please check your token is equal to which in app.ini of DB Compare Node Server")
+			return
+		}
+
 		database := GetUrlArg( r,"database")
 		if len(database) < 1 {
 			RenderErrorJson(w,"请提供数据库名称参数")
@@ -76,6 +96,11 @@ func routers() {
 	//数据库的表结构和索引 http://127.0.0.1:9100/table-info?database=xlhd&table=admin
 	//https://dev.anyich.com/dbcompare/table-info?database=xlhd&table=admin
 	http.HandleFunc("/table-info", func(w http.ResponseWriter, r *http.Request) {
+		if !CheckToken(r) {
+			RenderErrorJson(w,"Token incorrect, Please check your token is equal to which in app.ini of DB Compare Node Server")
+			return
+		}
+
 		database := GetUrlArg( r,"database")
 		tableName := GetUrlArg( r,"table")
 		if len(tableName) < 1 || len(database) < 1{
@@ -94,6 +119,11 @@ func routers() {
 
 	// 刷新配置
 	http.HandleFunc("/config/reload", func(w http.ResponseWriter, r *http.Request) {
+		if !CheckToken(r) {
+			RenderErrorJson(w,"Token incorrect, Please check your token is equal to which in app.ini of DB Compare Node Server")
+			return
+		}
+
 		conf.Reload()
 		RenderOKJson(w, conf.Config())
 	})

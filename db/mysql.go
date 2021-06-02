@@ -16,10 +16,10 @@ var engine *xorm.Engine
 //建立连接
 func Setup() {
 	ConnStr := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4",
-		conf.Config().Database.User,
-		conf.Config().Database.Password,
-		conf.Config().Database.Host,
-		conf.Config().Database.Name)
+		conf.Config().DatabaseSetting.User,
+		conf.Config().DatabaseSetting.Password,
+		conf.Config().DatabaseSetting.Host,
+		conf.Config().DatabaseSetting.Name)
 
 	var err error
 
@@ -29,7 +29,7 @@ func Setup() {
 	}
 
 	level := log.LOG_ERR
-	if conf.Config().App.RunMode != "pro" {
+	if conf.Config().AppSetting.RunMode != "pro" {
 		level = log.LOG_DEBUG
 	}
 
@@ -43,7 +43,7 @@ func Setup() {
 		pkg.Logger.Info("Connect to mysql OK ")
 	}
 
-	if conf.Config().App.RunMode != "pro" {
+	if conf.Config().AppSetting.RunMode != "pro" {
 		engine.ShowSQL(true)
 	}
 }

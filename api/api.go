@@ -11,7 +11,7 @@ import (
 )
 
 func Start()  {
-	addr := "0.0.0.0:" + strconv.Itoa(conf.Config().App.Port)
+	addr := "0.0.0.0:" + strconv.Itoa(conf.Config().AppSetting.Port)
 	s := &http.Server{
 		Addr:           addr,
 		MaxHeaderBytes: 1 << 30,
@@ -38,6 +38,18 @@ func RenderJson(w http.ResponseWriter, v interface{}) {
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Write(bs)
+}
+
+func CheckToken(r *http.Request) bool{
+	authHeader := r.Header.Get("Authorization")
+
+	if len(authHeader) < 1 {
+		return false
+	}
+
+	token := authHeader[len("Bearer "):]
+
+	return token == conf.Config().AppSetting.Token
 }
 
 type JsonResult struct {

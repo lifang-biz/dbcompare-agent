@@ -7,13 +7,14 @@ import (
 )
 
 type GlobalSetting struct {
-	App *App
-	Database *Database
+	AppSetting      *App
+	DatabaseSetting *Database
 }
 
 type App struct {
 	Port int
 	RunMode string
+	Token string
 }
 
 type Database struct {
@@ -29,8 +30,8 @@ var app = &App{}
 var database = &Database{}
 
 var globalSetting = &GlobalSetting{
-	App: app,
-	Database: database,
+	AppSetting:      app,
+	DatabaseSetting: database,
 }
 
 var configLock = new(sync.RWMutex)

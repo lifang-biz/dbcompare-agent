@@ -15,9 +15,9 @@ func SetupLogger() {
 
 	logLevel := zapcore.InfoLevel
 
-	if conf.Config().App.RunMode == "test" {
+	if conf.Config().AppSetting.RunMode == "test" {
 		logLevel = zapcore.DebugLevel
-	}else if conf.Config().App.RunMode == "pro" {
+	}else if conf.Config().AppSetting.RunMode == "pro" {
 		logLevel = zapcore.ErrorLevel
 	}
 
