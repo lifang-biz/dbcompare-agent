@@ -7,7 +7,7 @@ This is an agent for DBCompare desktop app.
 
 
 # DBCompare
-DBCompare is a tool for comparing to databases. more details here: https://github.com/lifang-biz/dbcompare-desktop
+DBCompare is a tool for comparing databases. more details here: https://github.com/lifang-biz/dbcompare-desktop
 DBCompare是一款数据库比较工具，目前支持比较MySQL数据库的表信息、列、索引。 这里有详细介绍 ：https://github.com/lifang-biz/dbcompare-desktop
 
 # Installation
